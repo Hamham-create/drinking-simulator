@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ゲージゲーム</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<audio id="bgm" src="BEER_MAN.mp3" loop></audio>
+
+<body>
+
+<div id="titleScreen">
+<h1>飲み会シミュレーター</h1>
+<p>お酒を飲んで酔いと満足感(Max100)を満タンにしよう！<br>
+<p>・お酒を飲みすぎるとすぐに酔うから注意<br>
+<p>・酔いと満足感を同時に満タンにすると...</p>
+<p>　</p>
+<p style="font-size:20px; color:red;">飲食物<br>
+
+<div class="centerBox">
+<p>
+<img src="beer_glass.png" class="ruleIcon"> ビール：酔い +6　満足感上昇 +4</p>
+<img src="drink_sparkling_wine.png" class="ruleIcon"> ワイン：酔い +12　満足感 +6</p>
+<img src="drink_whisky_scotch.png" class="ruleIcon"> ビール：酔い +20　満足感 +20</p>
+<img src="medicine_cup_water.png" class="ruleIcon"> お水：酔い -20　満足感 -10</p>
+<img src="kunsei_bacon.png" class="ruleIcon"> パンチェッタ：酔い・満足感上昇量アップ(10秒)</p>
+</div>
+
+<button onclick="startGame()">始める</button>
+</div>
+
+<div id="gameScreen">
+
+<div id="ui">
+<div>酔い</div>
+<div class="bar"><div id="gaugeP"></div></div>
+
+<div>満足感</div>
+<div class="bar"><div id="gaugeQ"></div></div>
+</div>
+
+<canvas id="gameCanvas" width="800" height="400"></canvas>
+
+<button id="pauseButton" onclick="pauseGame()">⏸</button>
+
+</div>
+
+<div id="clearPopup" class="hidden">
+<h2 id="clearTitle"></h2>
+<p id="clearText"></p>
+
+<button onclick="backTitle()">タイトルへ</button>
+<button onclick="restartGame()">もう一度</button>
+</div>
+
+<div id="boostIcon" class="hidden">
+<div id="boostRing"></div>
+<img src="kunsei_bacon.png">
+</div>
+
+<div id="pausePopup" class="hidden">
+
+<div class="pauseBox">
+
+<h2>一時停止</h2>
+
+<button onclick="resumeGame()">再開</button>
+<button onclick="backTitle()">タイトルへ</button>
+
+</div>
+
+</div>
+
+<script src="game.js"></script>
+
+</body>
+</html>
