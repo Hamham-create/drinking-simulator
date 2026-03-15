@@ -22,9 +22,9 @@ let boostRemain = 0;
 let lastFrameTime = Date.now();
 
 const bgm = document.getElementById("bgm");
-bgm.volume = 0.05;
+bgm.volume = 0.01;
 const pickupSound = new Audio("pickup.mp3");
-pickupSound.volume = 0.6;
+pickupSound.volume = 1;
 const clearSound = new Audio("clear.mp3");
 clearSound.volume = 0.3;
 const boostSound = new Audio("boost.mp3");
