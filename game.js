@@ -16,19 +16,23 @@ let gaugeQ = 0;
 
 let running = false;
 let spawnTimer = null;
+let decayTimer = null;
 
 let boostActive = false;
 let boostRemain = 0;
 let lastFrameTime = Date.now();
 
 const bgm = document.getElementById("bgm");
-bgm.volume = 0.01;
+bgm.volume = 0.05;
+bgm.preload = "auto";
 const pickupSound = new Audio("pickup.mp3");
 pickupSound.volume = 1;
 const clearSound = new Audio("clear.mp3");
 clearSound.volume = 0.3;
 const boostSound = new Audio("boost.mp3");
 boostSound.volume = 0.3;
+
+let audioUnlocked = false;
 
 const playerImage = new Image();
 playerImage.src = "player.png";
@@ -63,17 +67,15 @@ E:{color:"yellow",p:0,q:0,weight:5}
 
 function startGame(){
 
+unlockAudio();
+
 document.getElementById("titleScreen").style.display="none";
 document.getElementById("gameScreen").style.display="block";
 
 running=true;
 
-bgm.muted = true;
-bgm.play();
-bgm.muted = false;
-
 bgm.currentTime = 0;
-bgm.play();
+bgm.play().catch(()=>{});
 
 gameLoop();
 spawnLoop();
@@ -94,7 +96,7 @@ function resumeGame(){
 
 running = true;
 
-bgm.play();
+bgm.play().catch(()=>{});
 
 lastFrameTime = Date.now();
 
@@ -106,6 +108,9 @@ spawnLoop();
 }
 
 function restartGame(){
+
+clearInterval(spawnTimer);
+spawnTimer = null;
 
 running=false;
 
@@ -200,12 +205,14 @@ spawnItem();
 
 function decayLoop(){
 
-setInterval(()=>{
+if(decayTimer) return;
+
+decayTimer = setInterval(()=>{
 
 if(!running)return;
 
-gaugeP=Math.max(0,gaugeP-3);
-gaugeQ=Math.max(0,gaugeQ-3);
+gaugeP = Math.max(0,gaugeP-3);
+gaugeQ = Math.max(0,gaugeQ-3);
 
 updateGauge();
 
@@ -483,8 +490,42 @@ document.getElementById("clearText").innerText=text;
 
 }
 
-canvas.addEventListener("touchstart", handleTouch);
+canvas.addEventListener("touchstart", e=>{
+unlockAudio();
+handleTouch(e);
+});
+
 canvas.addEventListener("touchmove", handleTouch);
+
+function unlockAudio(){
+
+if(audioUnlocked) return;
+
+[pickupSound, clearSound, boostSound].forEach(sound => {
+
+sound.muted = true;
+
+sound.play().then(()=>{
+sound.pause();
+sound.currentTime = 0;
+sound.muted = false;
+}).catch(()=>{});
+
+});
+
+audioUnlocked = true;
+
+}
+
+function playSound(sound){
+
+const s = sound.cloneNode();
+
+s.volume = sound.volume;
+
+s.play().catch(()=>{});
+
+}
 
 function handleTouch(e){
 
