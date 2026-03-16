@@ -439,7 +439,7 @@ qGain *= 1.5;
 gaugeP = Math.max(0,Math.min(100,gaugeP+pGain));
 gaugeQ = Math.max(0,Math.min(100,gaugeQ+qGain));
 
-new Audio("pickup.mp3").play().catch(()=>{});
+playSound(pickupSound);
 
 updateGauge();
 
